@@ -7,6 +7,8 @@ import logging
 import time
 import pythoncom
 from py3nvml.py3nvml import *
+from pycaw.pycaw import AudioUtilities, IAudioMeterInformation
+from comtypes import CLSCTX_ALL
 
 # Setup logging for debugging
 logging.basicConfig(level=logging.INFO)
@@ -19,10 +21,16 @@ class SystemMonitor:
         self.audio_activity = False
         self.current_audio_level = 0
         self.current_gpu_usage = 0
+        self.voicemeeter_available = False
 
-        # Setup Voicemeeter Remote API
-        self.vmr = voicemeeterlib.api('banana', ldirty=True)
-        self.vmr.login()
+        # Versuch, Voicemeeter Remote API einzurichten
+        try:
+            self.vmr = voicemeeterlib.api('banana', ldirty=True)
+            self.vmr.login()
+            self.voicemeeter_available = True
+        except voicemeeterlib.error.CAPIError as e:
+            logging.error(f"VoiceMeeter nicht verfügbar: {e}")
+            self.voicemeeter_available = False
 
         try:
             # Initialize NVML for GPU usage
@@ -43,6 +51,11 @@ class SystemMonitor:
         self.gpu_monitor_thread = threading.Thread(target=self.monitor_gpu_usage, daemon=True)
         self.gpu_monitor_thread.start()
 
+        # Start audio monitoring thread if VoiceMeeter is not available
+        if not self.voicemeeter_available:
+            self.audio_monitor_thread = threading.Thread(target=self.monitor_audio_pycaw, daemon=True)
+            self.audio_monitor_thread.start()
+
     def on_mouse_event(self, *args):
         self.mouse_activity = True
 
@@ -50,24 +63,48 @@ class SystemMonitor:
         self.keyboard_activity = True
 
     def check_audio_activity(self):
-        try:
-            if self.vmr.ldirty:  # Check if level values are updated
-                for i in range(3):  # Check the first 3 outputs (A1, A2, A3)
-                    level = self.vmr.bus[i].levels.all  # Get level for A1, A2, A3
-                    logging.debug(f"Output A{i+1} Level: {level}")  # Debug output
-                    if level[0] > -40:  # Check only the first value of the tuple
-                        self.current_audio_level = self.convert_level_to_percentage(level[0])
-                        return True
-            return False
-        except Exception as e:
-            logging.error(f"Error checking audio activity: {e}")
-            return False
+        if self.voicemeeter_available:
+            try:
+                if self.vmr.ldirty:  # Check if level values are updated
+                    for i in range(3):  # Check the first 3 outputs (A1, A2, A3)
+                        level = self.vmr.bus[i].levels.all  # Get level for A1, A2, A3
+                        logging.debug(f"Output A{i+1} Level: {level}")  # Debug output
+                        if level[0] > -40:  # Check only the first value of the tuple
+                            self.current_audio_level = self.convert_level_to_percentage(level[0])
+                            return True
+                return False
+            except Exception as e:
+                logging.error(f"Error checking audio activity: {e}")
+                return False
+        else:
+            # Audio monitoring using pycaw is handled in the separate thread
+            return self.audio_activity
 
     def convert_level_to_percentage(self, level):
         # Convert audio level to percentage for the progress bar
         min_level = -60
         max_level = 0
         return max(0, min(100, 100 * (level - min_level) / (max_level - min_level)))
+
+    def monitor_audio_pycaw(self):
+        pythoncom.CoInitialize()  # Ensure COM is initialized in this thread
+        while True:
+            try:
+                sessions = AudioUtilities.GetAllSessions()
+                audio_active = False
+                max_volume = 0
+                for session in sessions:
+                    volume = session._ctl.QueryInterface(IAudioMeterInformation).GetPeakValue()
+                    if volume > 0.01:  # Consider audio active if volume is above a threshold
+                        audio_active = True
+                        max_volume = max(max_volume, volume)
+                self.current_audio_level = int(max_volume * 100)  # Convert to percentage
+                self.audio_activity = audio_active
+            except Exception as e:
+                logging.error(f"Error checking audio activity via pycaw: {e}")
+                self.audio_activity = False
+                self.current_audio_level = 0
+            time.sleep(1)
 
     def monitor_gpu_usage(self):
         while True:
