@@ -82,9 +82,11 @@ Verwendung
 Lizenz
 
 Dieses Projekt steht unter der MIT-Lizenz. Es ist lizenzfrei und für jedermann zur Verwendung und Weiterentwicklung freigegeben.
+
 Beiträge
 
 Beiträge sind willkommen! Wenn Sie Ideen, Fehlerberichte oder Verbesserungen haben, öffnen Sie bitte ein Issue oder senden Sie einen Pull-Request.
+
 Haftungsausschluss
 
 Dieses Tool wird ohne jegliche Garantie bereitgestellt. Die Nutzung erfolgt auf eigene Gefahr.
