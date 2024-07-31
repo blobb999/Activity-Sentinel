@@ -30,7 +30,7 @@ class ActivitySentinelApp(tk.Tk):
         self.state_label = tk.Label(self.monitoring_frame, text=translations[self.language]["active"], font=("Helvetica", 24, "bold"), fg="green")
         self.state_label.pack(pady=10)
 
-        self.audio_label = tk.Label(self.monitoring_frame, text=translations[self.language]["audio_activity"] + translations[self.language]["not_detected"])
+        self.audio_label = tk.Label(self.monitoring_frame, text=translations[self.language]["audio_activity"] + ": " + translations[self.language]["not_detected"])
         self.audio_label.pack(pady=10)
 
         # Add audio level progress bar
@@ -47,13 +47,13 @@ class ActivitySentinelApp(tk.Tk):
         self.audio_volume_threshold.pack(pady=5)
         self.audio_volume_threshold.set(20)  # Set default value to 20
 
-        self.mouse_label = tk.Label(self.monitoring_frame, text=translations[self.language]["mouse_activity"] + translations[self.language]["not_detected"])
+        self.mouse_label = tk.Label(self.monitoring_frame, text=translations[self.language]["mouse_activity"] + ": " + translations[self.language]["not_detected"])
         self.mouse_label.pack(pady=10)
 
-        self.keyboard_label = tk.Label(self.monitoring_frame, text=translations[self.language]["keyboard_activity"] + translations[self.language]["not_detected"])
+        self.keyboard_label = tk.Label(self.monitoring_frame, text=translations[self.language]["keyboard_activity"] + ": " + translations[self.language]["not_detected"])
         self.keyboard_label.pack(pady=10)
 
-        self.screen_label = tk.Label(self.monitoring_frame, text=translations[self.language]["screen_activity"] + translations[self.language]["not_detected"])
+        self.screen_label = tk.Label(self.monitoring_frame, text=translations[self.language]["screen_activity"] + ": " + translations[self.language]["not_detected"])
         self.screen_label.pack(pady=10)
 
         # GPU usage progress bar
@@ -169,12 +169,12 @@ class ActivitySentinelApp(tk.Tk):
         self.notebook.tab(0, text=translations[self.language]["monitoring_settings"])
         self.notebook.tab(1, text=translations[self.language]["configuration_settings"])
         self.state_label.config(text=translations[self.language]["active"] if self.state_label.cget("text") in ["Active", "Aktiv"] else translations[self.language]["inactive"])
-        self.audio_label.config(text=translations[self.language]["audio_activity"] + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.audio_label.cget("text") else translations[self.language]["not_detected"]))
+        self.audio_label.config(text=translations[self.language]["audio_activity"] + ": " + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.audio_label.cget("text") else translations[self.language]["not_detected"]))
         self.audio_threshold.config(label=translations[self.language]["audio_activity_duration"])
         self.audio_volume_threshold.config(label=translations[self.language]["audio_volume_threshold"])
-        self.mouse_label.config(text=translations[self.language]["mouse_activity"] + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.mouse_label.cget("text") else translations[self.language]["not_detected"]))
-        self.keyboard_label.config(text=translations[self.language]["keyboard_activity"] + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.keyboard_label.cget("text") else translations[self.language]["not_detected"]))
-        self.screen_label.config(text=translations[self.language]["screen_activity"] + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.screen_label.cget("text") else translations[self.language]["not_detected"]))
+        self.mouse_label.config(text=translations[self.language]["mouse_activity"] + ": " + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.mouse_label.cget("text") else translations[self.language]["not_detected"]))
+        self.keyboard_label.config(text=translations[self.language]["keyboard_activity"] + ": " + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.keyboard_label.cget("text") else translations[self.language]["not_detected"]))
+        self.screen_label.config(text=translations[self.language]["screen_activity"] + ": " + (translations[self.language]["detected"] if translations[self.language]["detected"] in self.screen_label.cget("text") else translations[self.language]["not_detected"]))
         self.gpu_threshold.config(label=translations[self.language]["gpu_threshold"])
         self.inactivity_script_button.config(text=translations[self.language]["select_inactivity_script"])
         self.inactivity_script_label.config(text=translations[self.language]["no_inactivity_script"] if not self.inactivity_script_path else self.inactivity_script_path)
@@ -301,10 +301,10 @@ class ActivitySentinelApp(tk.Tk):
             screen_monitored = self.screen_inactivity.get()
 
         # Update the labels to show the monitoring status and activity detection
-        self.audio_label.config(text=translations[self.language]["audio_activity"] + (translations[self.language]["detected"] if audio_status else translations[self.language]["not_detected"]) if audio_monitored else translations[self.language]["audio_activity"] + translations[self.language]["not_detected"])
-        self.mouse_label.config(text=translations[self.language]["mouse_activity"] + (translations[self.language]["detected"] if mouse_status else translations[self.language]["not_detected"]) if mouse_monitored else translations[self.language]["mouse_activity"] + translations[self.language]["not_detected"])
-        self.keyboard_label.config(text=translations[self.language]["keyboard_activity"] + (translations[self.language]["detected"] if keyboard_status else translations[self.language]["not_detected"]) if keyboard_monitored else translations[self.language]["keyboard_activity"] + translations[self.language]["not_detected"])
-        self.screen_label.config(text=translations[self.language]["screen_activity"] + (translations[self.language]["detected"] if screen_status else translations[self.language]["not_detected"]) if screen_monitored else translations[self.language]["screen_activity"] + translations[self.language]["not_detected"])
+        self.audio_label.config(text=translations[self.language]["audio_activity"] + ": " + (translations[self.language]["detected"] if audio_status else translations[self.language]["not_detected"]) if audio_monitored else translations[self.language]["audio_activity"] + ": " + translations[self.language]["not_detected"])
+        self.mouse_label.config(text=translations[self.language]["mouse_activity"] + ": " + (translations[self.language]["detected"] if mouse_status else translations[self.language]["not_detected"]) if mouse_monitored else translations[self.language]["mouse_activity"] + ": " + translations[self.language]["not_detected"])
+        self.keyboard_label.config(text=translations[self.language]["keyboard_activity"] + ": " + (translations[self.language]["detected"] if keyboard_status else translations[self.language]["not_detected"]) if keyboard_monitored else translations[self.language]["keyboard_activity"] + ": " + translations[self.language]["not_detected"])
+        self.screen_label.config(text=translations[self.language]["screen_activity"] + ": " + (translations[self.language]["detected"] if screen_status else translations[self.language]["not_detected"]) if screen_monitored else translations[self.language]["screen_activity"] + ": " + translations[self.language]["not_detected"])
 
         # Update audio level progress bar
         if audio_status:
