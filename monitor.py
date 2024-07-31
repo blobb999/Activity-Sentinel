@@ -14,6 +14,7 @@ from comtypes import CLSCTX_ALL
 logging.basicConfig(level=logging.INFO)
 
 class SystemMonitor:
+
     def __init__(self, gui):
         self.gui = gui
         self.mouse_activity = False
@@ -43,7 +44,6 @@ class SystemMonitor:
         # Setup listeners for mouse and keyboard
         self.mouse_listener = mouse.Listener(on_move=self.on_mouse_event, on_click=self.on_mouse_event, on_scroll=self.on_mouse_event)
         self.keyboard_listener = keyboard.Listener(on_press=self.on_keyboard_event)
-
         self.mouse_listener.start()
         self.keyboard_listener.start()
 
@@ -63,15 +63,22 @@ class SystemMonitor:
         self.keyboard_activity = True
 
     def check_audio_activity(self):
+        audio_threshold = self.gui.audio_volume_threshold.get()
         if self.voicemeeter_available:
             try:
                 if self.vmr.ldirty:  # Check if level values are updated
                     for i in range(3):  # Check the first 3 outputs (A1, A2, A3)
                         level = self.vmr.bus[i].levels.all  # Get level for A1, A2, A3
                         logging.debug(f"Output A{i+1} Level: {level}")  # Debug output
-                        if level[0] > -40:  # Check only the first value of the tuple
+                        if audio_threshold == 0:
+                            # Use a very low threshold but not zero
+                            sensitivity_threshold = -60 + 0.1
+                            if level[0] > sensitivity_threshold:
+                                self.current_audio_level = self.convert_level_to_percentage(level[0])
+                                return True
+                        elif level[0] > -40:  # Check only the first value of the tuple
                             self.current_audio_level = self.convert_level_to_percentage(level[0])
-                            return True
+                            return self.current_audio_level >= audio_threshold
                 return False
             except Exception as e:
                 logging.error(f"Error checking audio activity: {e}")
@@ -88,7 +95,7 @@ class SystemMonitor:
 
     def monitor_audio_pycaw(self):
         pythoncom.CoInitialize()  # Ensure COM is initialized in this thread
-        while True:
+        while self.gui.running:
             try:
                 sessions = AudioUtilities.GetAllSessions()
                 audio_active = False
@@ -107,7 +114,7 @@ class SystemMonitor:
             time.sleep(1)
 
     def monitor_gpu_usage(self):
-        while True:
+        while self.gui.running:
             if not self.gpu_monitoring_enabled:
                 break
             try:
@@ -137,11 +144,9 @@ class SystemMonitor:
         mouse_status = self.mouse_activity
         keyboard_status = self.keyboard_activity
         screen_status = self.check_screen_activity() if (self.gui.screen_activity.get() or self.gui.screen_inactivity.get()) else False
-
         # Reset activity status
         self.mouse_activity = False
         self.keyboard_activity = False
-
         return audio_status, mouse_status, keyboard_status, screen_status
 
     def run(self):
