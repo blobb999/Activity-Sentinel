@@ -79,14 +79,14 @@ Verwendung
     Skriptauswahl: Wählen Sie die Skripte aus, die bei Aktivität oder Inaktivität ausgeführt werden sollen.
     Starten: Die Anwendung überwacht nun die Systemaktivitäten und führt die ausgewählten Skripte basierend auf den festgelegten Bedingungen aus.
 
-Lizenz:
+Lizenz
 
 Dieses Projekt steht unter der MIT-Lizenz. Es ist lizenzfrei und für jedermann zur Verwendung und Weiterentwicklung freigegeben.
 
-Beiträge:
+Beiträge
 
 Beiträge sind willkommen! Wenn Sie Ideen, Fehlerberichte oder Verbesserungen haben, öffnen Sie bitte ein Issue oder senden Sie einen Pull-Request.
 
-Haftungsausschluss:
+Haftungsausschluss
 
 Dieses Tool wird ohne jegliche Garantie bereitgestellt. Die Nutzung erfolgt auf eigene Gefahr.
