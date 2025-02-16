@@ -23,6 +23,18 @@ from PIL import Image, ImageDraw
 from monitor import SystemMonitor  # Dein Monitor-Modul
 from language import translations  # Übersetzungen
 
+class _DevNull:
+    def write(self, *_):
+        pass
+    def flush(self):
+        pass
+
+if sys.stdout is None:
+    sys.stdout = _DevNull()
+
+if sys.stderr is None:
+    sys.stderr = _DevNull()
+
 # ---------------------------------------------
 # Kommandozeilenargumente auswerten (z.B. --minimized)
 # ---------------------------------------------
