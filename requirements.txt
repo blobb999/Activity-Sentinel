@@ -1,0 +1,5 @@
+pip install pystray
+pip install pycaw
+pip install py3nvml
+pip install voicemeeter-api
+pip install pynput

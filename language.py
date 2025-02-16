@@ -1,3 +1,5 @@
+# language.py
+
 translations = {
     "en": {
         "title": "Activity Sentinel",
@@ -23,7 +25,10 @@ translations = {
         "inactive": "Inactive",
         "language": "Language",
         "active_status": "Active Status",
-        "inactive_status": "Inactive Status"
+        "inactive_status": "Inactive Status",
+        "startup_user_login": "Startup at User Login",
+        "startup_minimized": "Startup minimized",
+        "minimize_to_tray": "Minimize to Tray (on X)"
     },
     "de": {
         "title": "Aktivitätswächter",
@@ -34,7 +39,7 @@ translations = {
         "detected": "Erkannt",
         "gpu_threshold": "GPU-Schwellenwert",
         "audio_activity_duration": "Audioaktivitätsdauer (Sekunden)",
-        "audio_volume_threshold": "Audiolautstärke Schwellenwert",
+        "audio_volume_threshold": "Audiolautstärke-Schwellenwert",
         "mouse_activity": "Mausaktivität",
         "keyboard_activity": "Tastaturaktivität",
         "screen_activity": "Bildschirmaktivität",
@@ -49,6 +54,9 @@ translations = {
         "inactive": "Inaktiv",
         "language": "Sprache",
         "active_status": "Status Aktiv",
-        "inactive_status": "Status Inaktiv"
+        "inactive_status": "Status Inaktiv",
+        "startup_user_login": "Autostart bei Benutzeranmeldung",
+        "startup_minimized": "Minimiert starten",
+        "minimize_to_tray": "In den Tray minimieren (bei X)"
     }
 }
