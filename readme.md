@@ -1,6 +1,6 @@
 Activity Sentinel
 
-![Activity Sentinel](https://github.com/user-attachments/assets/564472d3-c441-4945-968e-2ae85c5fff50)![Activity Sentinel-config](https://github.com/user-attachments/assets/667ac42b-c59e-4ed4-8d94-dc6aa740aed6)
+![Activity Sentinel](https://github.com/user-attachments/assets/564472d3-c441-4945-968e-2ae85c5fff50)![Image](https://github.com/user-attachments/assets/bd1a8e57-2416-4052-a92c-edb880d2c9a7)
 
 Activity Sentinel ist ein leistungsfähiges Überwachungs- und Verwaltungstool, das verschiedene Systemaktivitäten überwacht und darauf basierend Skripte ausführt. Es wurde speziell entwickelt, um Multimedia-Entertainment-Systeme unter Windows zu verwalten, auf die gelegentlich auch remote zugegriffen wird.
 Funktionen
